@@ -80,7 +80,12 @@ int main(int argc, char argv[])
 	setlocale(0, "");
 	DB_cntx new_DB;
 
-	cur_cmd = "test";
+	/*cur_cmd = "test";
+	new_DB.read_command(cur_cmd);*/
+	DBG
+	cur_cmd = "change ansamble name Катян AName песняры";
+	new_DB.read_command(cur_cmd);
+	cur_cmd = "get force SELECT * FROM musicstore.ansamble";
 	new_DB.read_command(cur_cmd);
 	return 0;
 }
