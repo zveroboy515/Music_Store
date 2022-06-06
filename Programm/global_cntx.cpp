@@ -21,13 +21,13 @@ bool global_cntx::read_command(std::string &cmd, DB_cntx &cur_db) {
 }
 
 bool global_cntx::sort(std::string &cmd, DB_cntx &cur_db) {
-	std::string cmd;
+	std::string sql_cmd;
 	//показать лидеров продаж текущего года, то есть названия
 		//компакт - дисков, которые чаще всего покупали в текущем году;
 	std::cout << "Рейтинг дисков/пластинок по кол-ву проданных в этом году" << std::endl;
 	//SELECT PLName FROM musicstore.platestat order by ~SellLastYear
-	cmd = "get force SELECT PLName FROM musicstore.platestat order by ~SellLastYear";
-	return cur_db.read_command(cmd);
+	sql_cmd = "get force SELECT PLName FROM musicstore.platestat order by ~SellLastYear";
+	return cur_db.read_command(sql_cmd);
 }
 
 bool global_cntx::filter(std::string &cmd, DB_cntx &cur_db)

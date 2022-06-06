@@ -38,6 +38,9 @@
     <ClInclude Include="cntx.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="db_table.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\libmysql.dll" />

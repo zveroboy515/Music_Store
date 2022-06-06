@@ -189,7 +189,7 @@ bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
 					break;
 				}
 				args.push_back(ans);
-				adding_arg = (ans == "plate") ? add_plate() : adding_arg;///ÇÀÒÛ×ÊÀ
+				adding_arg = (ans == "plate") ? add_plate() : adding_arg; //ÇÀÒÛ×ÊÀ
 				args.insert(args.end(), adding_arg.begin(), adding_arg.end());
 				break;
 			case CMD_CHANGE:
