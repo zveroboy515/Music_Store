@@ -6,7 +6,7 @@ enum DB_cmd {
 	CMD_CHANGE,
 	CMD_ADD,
 	CMD_GET,
-	//CMD_REMOVE// не реализовано
+	//CMD_REMOVE// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 };
 
 std::string DB_cmd_desc[]{
@@ -30,37 +30,37 @@ bool DB_cntx::initDB() {
 	int clientflag = 0;
 	//static MYSQL *conn;
 
-	// Получаем дескриптор соединения
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	DB_conn = mysql_init(NULL);
 	if (DB_conn == NULL)
 	{
-		// Если дескриптор не получен – выводим сообщение об ошибке
+		// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 		fprintf(stderr, "Error: can'tcreate MySQL-descriptor\n");
-		//exit(1); //Если используется оконное приложение
+		//exit(1); //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		return false;
 	}
 
-	std::cout << "Введите данные для подключения к БД (host username pwd db_name)" << std::endl;
+	std::cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ (host username pwd db_name)" << std::endl;
 	//std::cin >> host >> username >> pwd >> db_name;
 	db_name = "musicstore";
-	//правильный
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	//if (!mysql_real_connect(conn, host.c_str(), username.c_str(), pwd.c_str(), db_name.c_str(), port, unix_socket.c_str(), clientflag))
-	//для проверки
+	//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	if (!mysql_real_connect(DB_conn, "localhost", "german", "12345678", "musicstore", 3306, NULL, 0))
 	{
-		// Если нет возможности установить соединение с сервером
-		// базы данных выводим сообщение об ошибке
+		// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 		fprintf(stderr, "Error: can't connect to database %s\n", mysql_error(DB_conn));
 		return false;
 	}
 	else
 	{
-		// Если соединение успешно установлено выводим фразу - "Success!"
+		// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - "Success!"
 		fprintf(stdout, "Connection to database success!\n");
 	}
 
 	mysql_set_character_set(DB_conn, "cp1251");
-	//Смотрим изменилась ли кодировка на нужную, по умалчанию идёт latin1
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ latin1
 	std::cout << "connectioncharacterset: " << mysql_character_set_name(DB_conn) << std::endl;
 
 	return true;
@@ -78,14 +78,14 @@ bool DB_cntx::read_command(std::string &cmd) {
 	ss >> str;
 	//std::cout << "input command :(" << str << ")" << std::endl;
 	if (cmd_list.find(str) == cmd_list.end()) {
-		std::cout << "Неверная комманда" << std::endl;
+		std::cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" << std::endl;
 		return false;
 	}
 
 	return (*this.*(cmd_list[str]))(cmd);
 }
 
-bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в БД
+bool DB_cntx::add_obj(std::string &cmd) {//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ
 	std::vector<std::string> args;
 	std::string ans;
 
@@ -95,7 +95,7 @@ bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в Б
 	}
 	else if (args.size() == 4 ) {
 		if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_ADD].c_str()) + strlen(db_name.c_str()))
-			std::cout << "sql запрос может быть обрезан" << std::endl;
+			std::cout << "sql пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" << std::endl;
 		char sql_cmd[MAX_SQL_REQ];
 		sprintf_s(sql_cmd, DB_cmd_desc[CMD_ADD].c_str(), db_name.c_str(), args[1].c_str(), args[2].c_str(),
 			args[3].c_str());
@@ -107,14 +107,15 @@ bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в Б
 			return false;*/
 
 		while (1) { 
-			std::cout << "Введите название таблицы:" <<
-				"\nplate - добавить данные о новой пластинке/диске" <<
-				"\nansamble - добавить данные о новом ансамбле" <<
-				"\nstop - отмена добавления" << std::endl;
+			std::cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ:" <<
+				"\nplate - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅ" <<
+				"\nansamble - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" <<
+				"\nstop - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" << std::endl;
 			std::cin >> ans;
 			if (ans == "stop") return false;
 			else if (ans == "plate") {
 				plate new_pl(Pid);
+				Pid++;
 				args = new_pl.generic_args();
 				break;
 			}
@@ -126,7 +127,7 @@ bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в Б
 		}
 
 		if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_ADD].c_str()) + strlen(db_name.c_str()))
-			std::cout << "sql запрос может быть обрезан" << std::endl;
+			std::cout << "sql пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" << std::endl;
 		sprintf_s(sql_cmd, DB_cmd_desc[CMD_ADD].c_str(), db_name.c_str(), ans.c_str(), args[0].c_str(),
 			args[1].c_str());
 		std::cout <<"sql_cmd = " << sql_cmd << std::endl;
@@ -149,9 +150,9 @@ bool DB_cntx::change_obj(std::string &cmd) {
 	}
 	else if (args.size() == 6) { 
 		if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_CHANGE].c_str()) + strlen(db_name.c_str()))
-			std::cout << "sql запрос может быть обрезан" << std::endl;
+			std::cout << "sql пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" << std::endl;
 		char sql_cmd[MAX_SQL_REQ]; //255
-		//динамично, но опасно
+		//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 		 //const int len = sizeof(args) + strlen(DB_cmds[0].c_str()) + strlen(db_name.c_str());
 		 //char sql_cmd[len];
 		sprintf_s(sql_cmd, DB_cmd_desc[CMD_CHANGE].c_str(), db_name.c_str(), args[1].c_str(), args[2].c_str(),
@@ -161,10 +162,10 @@ bool DB_cntx::change_obj(std::string &cmd) {
 		ErrExit(args.size());
 		return false;
 	}
-	//стабильно но может обрезаться
+	//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	
-	//норм запрос
-	//mysql_query(DB_conn, "UPDATE `musicstore`.`ansamble` SET `name` = 'Катян' WHERE(`AName` = 'песняры')");
+	//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+	//mysql_query(DB_conn, "UPDATE `musicstore`.`ansamble` SET `name` = 'пїЅпїЅпїЅпїЅпїЅ' WHERE(`AName` = 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ')");
 	
 	return true;
 }
@@ -179,7 +180,7 @@ bool DB_cntx::get_obj(std::string &cmd) {
 	}
 	else if (args.size() == 3) {
 		if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_GET].c_str()) + strlen(db_name.c_str()))
-			std::cout << "sql запрос может быть обрезан" << std::endl;
+			std::cout << "sql пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" << std::endl;
 		char sql_cmd[MAX_SQL_REQ];
 		sprintf_s(sql_cmd, DB_cmd_desc[CMD_GET].c_str(),
 			args[1].c_str(), args[2].c_str());
@@ -192,11 +193,11 @@ bool DB_cntx::get_obj(std::string &cmd) {
 	if (res = mysql_store_result(DB_conn)) {
 		while (row = mysql_fetch_row(res)) {
 			for (int i = 0; i < mysql_num_fields(res); i++) {
-				std::cout << row[i] << "\n"; //Выводим все что есть в базе через цикл
+				std::cout << row[i] << "\n"; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 			}
 		}
-	}else std::cout << "В ДБ нет данных" << std::endl;
-	//mysql_query(DB_conn, "SELECT * FROM ansamble"); //Делаем запрос к таблице по имени МНУ =)
+	}else std::cout << "пїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" << std::endl;
+	//mysql_query(DB_conn, "SELECT * FROM ansamble"); //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ =)
 	return true;
 }
 
@@ -210,25 +211,25 @@ bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
 		switch (flag)
 		{
 			case CMD_ADD:
-				std::cout << "Введите название таблицы:" <<
-							 "\nplate - добавить данные о новой пластинке/диске" <<
-							 "\nansamble - добавить данные о новом ансамбле" <<
-							 "\nstop - отмена добавления"<< std::endl;
+				std::cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ:" <<
+							 "\nplate - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅ" <<
+							 "\nansamble - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" <<
+							 "\nstop - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"<< std::endl;
 				std::cin >> ans;
 				if (ans != "stop") return false;
 				else if (ans != "plate" && ans != "ansamble") {
-					std::cout << "Неверная команда, повторите ввод" << std::endl;
+					std::cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ" << std::endl;
 					break;
 				}
 				args.push_back(ans);
-				//adding_arg = (ans == "plate") ? add_plate() : adding_arg; //ЗАТЫЧКА
+				//adding_arg = (ans == "plate") ? add_plate() : adding_arg; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 				//args.insert(args.end(), adding_arg.begin(), adding_arg.end());
 				break;
 			case CMD_CHANGE:
 
 				break;
 			default:
-				std::cout << "Некорректный аргумент в ф-ции " << __func__ << std::endl;
+				std::cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ-пїЅпїЅпїЅ " << __func__ << std::endl;
 				return NULL;
 				break;
 		}
@@ -244,24 +245,24 @@ bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
 bool DB_cntx::test_func(std::string &cmd) {
 	int i = 0;
 
-	// Подключаемся к серверу
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	//if (!initDB()) return 0;
 	//initDB();
 
-	//mysql_query(conn, "UPDATE `musicstore`.`ansamble` SET `name` = 'Катян' WHERE(`AName` = 'песняры')");
+	//mysql_query(conn, "UPDATE `musicstore`.`ansamble` SET `name` = 'пїЅпїЅпїЅпїЅпїЅ' WHERE(`AName` = 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ')");
 					  //"INSERT INTO `musicstore`.`person` (`Profession`, `AName`, `PName`) VALUES('we', 'jgf', 'sdc')"
-	mysql_query(DB_conn, "INSERT INTO `musicstore`.`person` (`Profession`, `AName`, `PName`) VALUES('Исполнитель', 'песняры', 'Вова')");
-	mysql_query(DB_conn, "INSERT INTO `musicstore`.`person` (`Profession`, `AName`, `PName`) VALUES('Исполнитель', 'песняры', 'Петя')");
-	mysql_query(DB_conn, "INSERT INTO `musicstore`.`person` (`Profession`, `AName`, `PName`) VALUES('Исполнитель', 'Skilet', 'Катя')");
-	//mysql_query(conn, "INSERT INTO `musicstore`.`ansamble` (`name`, `AName`) VALUES('Вова', 'песняры')");
-	std::cout << "Получаем таблицу Ансамблей" << std::endl;
-	mysql_query(DB_conn, "SELECT * FROM ansamble"); //Делаем запрос к таблице по имени МНУ =)
+	mysql_query(DB_conn, "INSERT INTO `musicstore`.`person` (`Profession`, `AName`, `PName`) VALUES('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅ')");
+	mysql_query(DB_conn, "INSERT INTO `musicstore`.`person` (`Profession`, `AName`, `PName`) VALUES('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅ')");
+	mysql_query(DB_conn, "INSERT INTO `musicstore`.`person` (`Profession`, `AName`, `PName`) VALUES('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ', 'Skilet', 'пїЅпїЅпїЅпїЅ')");
+	//mysql_query(conn, "INSERT INTO `musicstore`.`ansamble` (`name`, `AName`) VALUES('пїЅпїЅпїЅпїЅ', 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅ')");
+	std::cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" << std::endl;
+	mysql_query(DB_conn, "SELECT * FROM ansamble"); //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ =)
 
 	if (res = mysql_store_result(DB_conn)) {
 		while (row = mysql_fetch_row(res)) {
 			if (mysql_num_fields(res) <= 0) std::cout << "DB empty" << std::endl;
 			for (i = 0; i < mysql_num_fields(res); i++) {
-				std::cout << row[i] << "\n"; //Выводим все что есть в базе через цикл
+				std::cout << row[i] << "\n"; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 			}
 		}
 	}
@@ -270,13 +271,13 @@ bool DB_cntx::test_func(std::string &cmd) {
 		return false;
 	}
 
-	std::cout << "Получаем таблицу Людей" << std::endl;
+	std::cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ" << std::endl;
 	mysql_query(DB_conn, "SELECT * FROM Person");
 	if (res = mysql_store_result(DB_conn)) {
 		while (row = mysql_fetch_row(res)) {
 			if (mysql_num_fields(res) <= 0) std::cout << "DB empty" << std::endl;
 			for (i = 0; i < mysql_num_fields(res); i++) {
-				std::cout << row[i] << "\n"; //Выводим все что есть в базе через цикл
+				std::cout << row[i] << "\n"; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 			}
 		}
 	}
@@ -284,7 +285,7 @@ bool DB_cntx::test_func(std::string &cmd) {
 		return false;
 	}
 
-	// Закрываем соединение с сервером базы данных
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	mysql_close(DB_conn);
 
 	//system("Pause");
