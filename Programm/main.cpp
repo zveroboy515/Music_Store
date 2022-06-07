@@ -79,14 +79,27 @@ int main(int argc, char argv[])
 
 	setlocale(0, "");
 	DB_cntx new_DB;
+	global_cntx cur_cntx;
+
+	while (1) {
+		std::cout << "Введите комманду:" <<
+			"\ndb - добавить/изменить данные в базе данных"<<
+			"\nfilter - получить отфильтрованную информацию из БД" <<
+			"\nsort - получить отсортированную информацию из БД"<<
+			"\nstop - выйти из программы"<< std::endl;
+		std::cin >> cur_cmd;
+		if (cur_cmd == "stop") break;
+		cur_cntx.read_command(cur_cmd, new_DB);
+		cin.ignore();
+	}
 
 	/*cur_cmd = "test";
 	new_DB.read_command(cur_cmd);*/
-	DBG
+	/*DBG
 	cur_cmd = "change ansamble name Катян AName песняры";
 	new_DB.read_command(cur_cmd);
 	cur_cmd = "get force SELECT * FROM musicstore.ansamble";
-	new_DB.read_command(cur_cmd);
+	new_DB.read_command(cur_cmd);*/
 	return 0;
 }
 

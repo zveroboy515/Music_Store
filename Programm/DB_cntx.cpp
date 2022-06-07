@@ -1,4 +1,5 @@
 #include "cntx.h"
+#include "db_table.h"
 #include <sstream>
 
 enum DB_cmd {
@@ -75,12 +76,18 @@ bool DB_cntx::read_command(std::string &cmd) {
 	std::string str;
 
 	ss >> str;
-	std::cout << "input command :(" << str << ")" << std::endl;
+	//std::cout << "input command :(" << str << ")" << std::endl;
+	if (cmd_list.find(str) == cmd_list.end()) {
+		std::cout << "Неверная комманда" << std::endl;
+		return false;
+	}
+
 	return (*this.*(cmd_list[str]))(cmd);
 }
 
 bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в БД
 	std::vector<std::string> args;
+	std::string ans;
 
 	args = ParsInArgs(cmd);
 	if (args.size() > 1 && args[1] == "force") {
@@ -95,9 +102,34 @@ bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в Б
 		mysql_query(DB_conn, sql_cmd);
 	}else{
 		char sql_cmd[MAX_SQL_REQ];
-		if (!generic_SQLrequest(CMD_ADD, sql_cmd))
-			return false;
-		
+		//old function
+		/*if (!generic_SQLrequest(CMD_ADD, sql_cmd))
+			return false;*/
+
+		while (1) { 
+			std::cout << "Введите название таблицы:" <<
+				"\nplate - добавить данные о новой пластинке/диске" <<
+				"\nansamble - добавить данные о новом ансамбле" <<
+				"\nstop - отмена добавления" << std::endl;
+			std::cin >> ans;
+			if (ans == "stop") return false;
+			else if (ans == "plate") {
+				plate new_pl(Pid);
+				args = new_pl.generic_args();
+				break;
+			}
+			else if (ans == "ansamble") {
+				ansamble new_ans;
+				args = new_ans.generic_args();
+				break;
+			}
+		}
+
+		if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_ADD].c_str()) + strlen(db_name.c_str()))
+			std::cout << "sql запрос может быть обрезан" << std::endl;
+		sprintf_s(sql_cmd, DB_cmd_desc[CMD_ADD].c_str(), db_name.c_str(), ans.c_str(), args[0].c_str(),
+			args[1].c_str());
+		std::cout <<"sql_cmd = " << sql_cmd << std::endl;
 		mysql_query(DB_conn, sql_cmd);
 
 		//ErrExit(args.size());
@@ -159,16 +191,16 @@ bool DB_cntx::get_obj(std::string &cmd) {
 
 	if (res = mysql_store_result(DB_conn)) {
 		while (row = mysql_fetch_row(res)) {
-			if (mysql_num_fields(res) <= 0) std::cout << "DB empty" << std::endl;
 			for (int i = 0; i < mysql_num_fields(res); i++) {
 				std::cout << row[i] << "\n"; //Выводим все что есть в базе через цикл
 			}
 		}
-	}
+	}else std::cout << "В ДБ нет данных" << std::endl;
 	//mysql_query(DB_conn, "SELECT * FROM ansamble"); //Делаем запрос к таблице по имени МНУ =)
 	return true;
 }
 
+//old function
 bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
 	//char 
 	std::string ans;
@@ -189,8 +221,8 @@ bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
 					break;
 				}
 				args.push_back(ans);
-				adding_arg = (ans == "plate") ? add_plate() : adding_arg; //ЗАТЫЧКА
-				args.insert(args.end(), adding_arg.begin(), adding_arg.end());
+				//adding_arg = (ans == "plate") ? add_plate() : adding_arg; //ЗАТЫЧКА
+				//args.insert(args.end(), adding_arg.begin(), adding_arg.end());
 				break;
 			case CMD_CHANGE:
 
@@ -204,9 +236,9 @@ bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
 
 }
 
-std::vector<std::string> DB_cntx::add_plate(){
+/*std::vector<std::string> DB_cntx::add_plate(){
 	
-}
+}*/
 
 
 bool DB_cntx::test_func(std::string &cmd) {

@@ -16,7 +16,12 @@ bool global_cntx::read_command(std::string &cmd, DB_cntx &cur_db) {
 	std::string str;
 
 	ss >> str;
-	std::cout << "input command :(" << str << ")" << std::endl;
+	//std::cout << "input command :(" << str << ")" << std::endl;
+	if (cmd_list.find(cmd) == cmd_list.end()) {
+		std::cout << "Неверная комманда" << std::endl;
+		return false;
+	}
+
 	return (*this.*(cmd_list[str]))(cmd, cur_db);
 }
 
@@ -33,6 +38,7 @@ bool global_cntx::sort(std::string &cmd, DB_cntx &cur_db) {
 bool global_cntx::filter(std::string &cmd, DB_cntx &cur_db)
 {
 	std::string str;
+	std::cout << "Не реализовано" << std::endl;
 	//1) получить количество музыкальных произведений заданного ансамбля;
 	//SELECT * FROM musicstore WHERE ansamble = ''
 	//2) выводить название всех компакт-дисков заданного ансамбля;
@@ -45,17 +51,21 @@ bool global_cntx::db_process(std::string &cmd, DB_cntx &cur_db)
 	std::string str;
 
 	while (1) {
-		std::cout << " Введите операцию: " <<
+		std::cout << "Введите операцию: " <<
 			"\nchange - изменение имеющихся в БД записей" <<
 			"\nadd - добавление новых записей в БД" <<
 			"\nstop - для возврата в главное меню" << std::endl;
 		std::cin >> str;
-
-		if (str == "change" || str == "add") cmd = str + " ";
+		if (str == "stop") return false;
+		if(cur_db.read_command(str)) break;
+		/*if (str == "change" || str == "add") { 
+			cmd = str + " ";
+			break;
+		}
 		else if (str == "stop") return false;
-		std::cout << "Неизвестная комманда, повторите ввод" << std::endl;
+		std::cout << "Неизвестная комманда, повторите ввод" << std::endl;*/
 	}
-	cur_db.read_command(str);
+	
 	/*while (1) {
 		std::cout << " Введите таблицу с которой собираетеь работать: " <<
 			"\nansamble - таблица ансамблей" <<

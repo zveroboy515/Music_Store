@@ -16,6 +16,7 @@ class DB_cntx :
 {
 	std::map <std::string, bool( (DB_cntx::*)(std::string&))> cmd_list;
 	std::string db_name;
+	int Pid = 0;
 	MYSQL *DB_conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;
@@ -25,7 +26,7 @@ class DB_cntx :
 	bool get_obj(std::string &cmd);
 	bool add_obj(std::string &cmd);
 	bool change_obj(std::string &cmd);
-	std::vector<std::string>  add_plate();
+	//std::vector<std::string>  add_plate();
 	bool generic_SQLrequest(int flag, char *sql_res);
 public:
 	bool add_cmd(std::string cmd, bool((DB_cntx::*func)(std::string&)));

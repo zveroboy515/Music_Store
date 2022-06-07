@@ -170,6 +170,7 @@
     <ClCompile Include="cntx.cpp" />
     <ClCompile Include="common.cpp" />
     <ClCompile Include="DB_cntx.cpp" />
+    <ClCompile Include="db_table.cpp" />
     <ClCompile Include="global_cntx.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
