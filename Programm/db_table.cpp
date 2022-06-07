@@ -33,21 +33,33 @@ std::vector<std::string> plate::generic_args()
 }
 
 std::vector<std::string> plate::change_plate() {
-	std::string fields[3]{"дата производства", "название выпустившей компании" ,"адрес оптовой фирмы"};
-	std::string ans, res = "";
+	std::vector<std::string> fields_name{"дата производства", "адрес оптовой фирмы", "название выпустившей компании" };
+	std::vector<std::string> fields_key{ "Date", "MAddress", "MName" };
+	std::string ans;
+	std::vector<std::string> res{"",""};
+	//res.resize(2);
 	/*вызов списка пластинок в DB_cntxt*/
+
 	std::cout << "¬ведите id пластинки, которую хотите изменить '" << std::endl;
-	for (auto &it : fields) {
-		std::cout << "’отите изменить поле '" << it << "' ?(да - хочу, другие символы -нет)" << std::endl;
+	std::cin >> ans;
+	res[1] = "`id` = '" + ans + "'";
+	//for (auto &it : fields_name) {
+	for (int i = 0; i < fields_name.size(); i++) {
+		std::cout << "’отите изменить поле '" << fields_name[i] << "' ?(yes/no)" << std::endl;
 		std::cin >> ans;
-		if (ans == "да") {
-			std::cout << "¬ведите значение пол€ '" << it << "'" << std::endl;
-			std::cin.ignore();
+		std::cin.ignore();
+		if (ans == "yes") {
+			if (res[0] != "") res[0] += ',';
+			res[0] += "`" + fields_key[i] +"` = ";
+			std::cout << "¬ведите значение пол€ '" << fields_name[i] << "'" << std::endl;
+			//std::cin >> ans;
+			//std::cin.ignore();
 			getline(std::cin, ans);
-			if (res != "") res += ',';
-			res += "'" + ans + "'";
+			res[0] += "'" + ans + "'";
 		}
 	}
+	//std::cout << res[1] << std::endl;
+	return res;
 	//std::cout<<
 }
 

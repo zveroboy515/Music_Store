@@ -6,18 +6,17 @@ enum DB_cmd {
 	CMD_CHANGE,
 	CMD_ADD,
 	CMD_GET,
-	//CMD_REMOVE// не реализовано
 };
 
 std::string DB_cmd_desc[]{
-	"UPDATE `%s`.`%s` SET `%s` = '%s' WHERE(`%s` = '%s')\0",
+	"UPDATE `%s`.`%s` SET %s WHERE(%s)\0",
 	"INSERT INTO `%s`.`%s` (%s) VALUES(%s)\0",
-	"SELECT %s FROM %s"
+	"SELECT %s FROM %s \0"
 };
 
 DB_cntx::DB_cntx() {
 	initDB();
-	add_cmd("test", &DB_cntx::test_func);
+	//add_cmd("test", &DB_cntx::test_func);
 	add_cmd("get", &DB_cntx::get_obj);
 	add_cmd("add", &DB_cntx::add_obj);
 	add_cmd("change", &DB_cntx::change_obj);
@@ -28,25 +27,27 @@ bool DB_cntx::initDB() {
 	int port = 0;
 	std::string unix_socket;
 	int clientflag = 0;
-	//static MYSQL *conn;
 
 	// Получаем дескриптор соединения
 	DB_conn = mysql_init(NULL);
 	if (DB_conn == NULL)
 	{
-		// Если дескриптор не получен – выводим сообщение об ошибке
 		fprintf(stderr, "Error: can'tcreate MySQL-descriptor\n");
-		//exit(1); //Если используется оконное приложение
 		return false;
 	}
 
-	std::cout << "Введите данные для подключения к БД (host username pwd db_name)" << std::endl;
-	//std::cin >> host >> username >> pwd >> db_name;
-	db_name = "musicstore";
-	//правильный
-	//if (!mysql_real_connect(conn, host.c_str(), username.c_str(), pwd.c_str(), db_name.c_str(), port, unix_socket.c_str(), clientflag))
+	std::cout << "Введите данные для подключения к БД (host логин пароль название_ДБ)" << std::endl;
+	std::cin >> host;
+	//Заглушка для отладки
+	if (host == "def") { 
+		!mysql_real_connect(DB_conn, "localhost", "german", "12345678", "musicstore", 3306, NULL, 0);
+		db_name = "musicstore";
+		goto cont;
+	}
+	else std::cin >> username >> pwd >> db_name;
+	if (!mysql_real_connect(DB_conn, host.c_str(), username.c_str(), pwd.c_str(), db_name.c_str(), port, unix_socket.c_str(), clientflag))
 	//для проверки
-	if (!mysql_real_connect(DB_conn, "localhost", "german", "12345678", "musicstore", 3306, NULL, 0))
+	//if (!mysql_real_connect(DB_conn, "localhost", "german", "12345678", "musicstore", 3306, NULL, 0))
 	{
 		// Если нет возможности установить соединение с сервером
 		// базы данных выводим сообщение об ошибке
@@ -58,7 +59,7 @@ bool DB_cntx::initDB() {
 		// Если соединение успешно установлено выводим фразу - "Success!"
 		fprintf(stdout, "Connection to database success!\n");
 	}
-
+cont:
 	mysql_set_character_set(DB_conn, "cp1251");
 	//Смотрим изменилась ли кодировка на нужную, по умалчанию идёт latin1
 	std::cout << "connectioncharacterset: " << mysql_character_set_name(DB_conn) << std::endl;
@@ -146,7 +147,8 @@ bool DB_cntx::change_obj(std::string &cmd) {
 
 	if (args.size() > 1 && args[1] == "force") {
 		mysql_query(DB_conn, cmd.substr(cmd.find("force") + strlen("force")).c_str());
-	}
+	//Старая версия
+		/*}
 	else if (args.size() == 6) { 
 		if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_CHANGE].c_str()) + strlen(db_name.c_str()))
 			std::cout << "sql запрос может быть обрезан" << std::endl;
@@ -156,15 +158,23 @@ bool DB_cntx::change_obj(std::string &cmd) {
 		 //char sql_cmd[len];
 		sprintf_s(sql_cmd, DB_cmd_desc[CMD_CHANGE].c_str(), db_name.c_str(), args[1].c_str(), args[2].c_str(),
 			args[3].c_str(), args[4].c_str(), args[5].c_str());
-		mysql_query(DB_conn, sql_cmd);
+		mysql_query(DB_conn, sql_cmd);*/
 	}else{
-		ErrExit(args.size());
-		return false;
+		/*ErrExit(args.size());
+		return false;*/
+		std::cout << "Реализовано изменение информации только о дисках/пластинках(по ТЗ)" << std::endl;
+		args = plate::change_plate();
+		if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_CHANGE].c_str()) + strlen(db_name.c_str()))
+			std::cout << "sql запрос может быть обрезан" << std::endl;
+		char sql_cmd[MAX_SQL_REQ]; //255
+		
+		sprintf_s(sql_cmd, DB_cmd_desc[CMD_CHANGE].c_str(), db_name.c_str(),
+			"plate", args[0].c_str(), args[1].c_str());
+		//std::cout << sql_cmd << std::endl;
+		mysql_query(DB_conn, sql_cmd);
 	}
+
 	//стабильно но может обрезаться
-	
-	//норм запрос
-	//mysql_query(DB_conn, "UPDATE `musicstore`.`ansamble` SET `name` = 'Катян' WHERE(`AName` = 'песняры')");
 	
 	return true;
 }
@@ -201,7 +211,7 @@ bool DB_cntx::get_obj(std::string &cmd) {
 }
 
 //old function
-bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
+/*bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
 	//char 
 	std::string ans;
 	std::vector<std::string> args, adding_arg;
@@ -234,14 +244,10 @@ bool DB_cntx::generic_SQLrequest(int flag, char *sql_res) {
 		}
 	}
 
-}
-
-/*std::vector<std::string> DB_cntx::add_plate(){
-	
 }*/
 
-
-bool DB_cntx::test_func(std::string &cmd) {
+//test
+/*bool DB_cntx::test_func(std::string &cmd) {
 	int i = 0;
 
 	// Подключаемся к серверу
@@ -291,3 +297,4 @@ bool DB_cntx::test_func(std::string &cmd) {
 
 	return true;
 }
+*/

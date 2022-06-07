@@ -10,6 +10,7 @@ class plate
 	//static int pNum;
 	bool is_date(std::string &date);//не реализовано
 public:
+	static std::vector<std::string> change_plate();
 	plate(int pNum);
 	std::vector<std::string>generic_args();
 };
