@@ -117,6 +117,7 @@ bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в Б
 			else if (ans == "plate") {
 				plate new_pl(Pid);
 				args = new_pl.generic_args();
+				Pid++;
 				break;
 			}
 			else if (ans == "ansamble") {
