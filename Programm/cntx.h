@@ -22,12 +22,13 @@ class DB_cntx :
 	MYSQL_ROW row;
 
 	bool initDB();
-	bool test_func(std::string &cmd);
+	//bool test_func(std::string &cmd);
 	bool get_obj(std::string &cmd);
 	bool add_obj(std::string &cmd);
 	bool change_obj(std::string &cmd);
+	bool new_obj(std::string table, std::string key);
 	//std::vector<std::string>  add_plate();
-	bool generic_SQLrequest(int flag, char *sql_res);
+	//bool generic_SQLrequest(int flag, char *sql_res);
 public:
 	bool add_cmd(std::string cmd, bool((DB_cntx::*func)(std::string&)));
 	bool read_command(std::string &cmd) override;

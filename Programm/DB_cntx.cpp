@@ -11,7 +11,7 @@ enum DB_cmd {
 std::string DB_cmd_desc[]{
 	"UPDATE `%s`.`%s` SET %s WHERE(%s)\0",
 	"INSERT INTO `%s`.`%s` (%s) VALUES(%s)\0",
-	"SELECT %s FROM %s \0"
+	"SELECT %s FROM %s \0",
 };
 
 DB_cntx::DB_cntx() {
@@ -86,6 +86,13 @@ bool DB_cntx::read_command(std::string &cmd) {
 	return (*this.*(cmd_list[str]))(cmd);
 }
 
+bool DB_cntx::new_obj(std::string table, std::string key) {
+	std::string cmd;
+
+	cmd = "get force SELECT `" + key + "` FROM `" + db_name +"`.`" + table + "` WHERE ()";
+	return !(*this).get_obj(cmd);
+}
+
 bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в БД
 	std::vector<std::string> args;
 	std::string ans;
@@ -115,9 +122,24 @@ bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в Б
 			std::cin >> ans;
 			if (ans == "stop") return false;
 			else if (ans == "plate") {
+				std::cout << "Введите id пластинки" << std::endl;
+				std::cin >> Pid;
 				plate new_pl(Pid);
 				args = new_pl.generic_args();
-				Pid++;
+			
+				if (new_obj("PlateStat", "id")) {
+					
+					if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_ADD].c_str()) + strlen(db_name.c_str()))
+						std::cout << "sql запрос может быть обрезан" << std::endl;
+					sprintf_s(sql_cmd, DB_cmd_desc[CMD_ADD].c_str(), db_name.c_str(), ans.c_str(), args[0].c_str(),
+						args[1].c_str());
+					std::cout << "sql_cmd = " << sql_cmd << std::endl;
+					mysql_query(DB_conn, sql_cmd);
+					
+					ans = "PlateStat";
+					new_pl.pl_trigger(Pid);
+					args = new_pl.generic_args();
+				}
 				break;
 			}
 			else if (ans == "ansamble") {
@@ -143,6 +165,7 @@ bool DB_cntx::add_obj(std::string &cmd) {//добавление информации об ансамбле в Б
 
 bool DB_cntx::change_obj(std::string &cmd) {
 	std::vector<std::string> args;
+	std::string tmp;
 
 	args = ParsInArgs(cmd);
 
@@ -164,6 +187,12 @@ bool DB_cntx::change_obj(std::string &cmd) {
 		/*ErrExit(args.size());
 		return false;*/
 		std::cout << "Реализовано изменение информации только о дисках/пластинках(по ТЗ)" << std::endl;
+		tmp = "get id plate";
+		if (!(*this).get_obj(tmp)) {
+			std::cout << "В ДБ нет добавленных пластинок" << std::endl;
+			return false;
+		}
+		
 		args = plate::change_plate();
 		if (MAX_SQL_REQ <= sizeof(args) + strlen(DB_cmd_desc[CMD_CHANGE].c_str()) + strlen(db_name.c_str()))
 			std::cout << "sql запрос может быть обрезан" << std::endl;
@@ -206,7 +235,11 @@ bool DB_cntx::get_obj(std::string &cmd) {
 				std::cout << row[i] << "\n"; //Выводим все что есть в базе через цикл
 			}
 		}
-	}else std::cout << "В ДБ нет данных" << std::endl;
+	}
+	else { 
+		//std::cout << "В ДБ нет данных" << std::endl;
+		return false;
+	}
 	//mysql_query(DB_conn, "SELECT * FROM ansamble"); //Делаем запрос к таблице по имени МНУ =)
 	return true;
 }

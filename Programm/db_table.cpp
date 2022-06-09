@@ -7,6 +7,7 @@ bool plate::is_date(std::string &date) {
 
 plate::plate(int pNum) {
 	std::string ans;
+
 	keys = "`id`,`Date`,`MAddress`,`MName`";
 	//values.push_back(std::string(std::to_string(pNum)));
 	values = "'" + std::to_string(pNum) + "'";
@@ -25,6 +26,21 @@ plate::plate(int pNum) {
 	values += ",'" + ans + "'";
 	
 	//values.push_back(ans)
+}
+
+bool plate::pl_trigger(int pNum) {
+	std::vector<std::string> fied_descs{ "оптовую цену", "розничную цену", "кол-во проданных в прошлом году пластинок", "кол-во проданных в этом году пластинок", "кол-во оставшихся пластинок" };
+	std::string ans;
+
+	keys = "`id`, `OptPrice`, `Price`,`SellLastYear`,`SellCurtYear`, `InShop` ";
+	values = "'" + std::to_string(pNum) + "'";
+	for (auto &it : fied_descs) {
+		std::cout << "введите " << it << std::endl;
+		std::cin >> ans;
+		
+		values += ",'" + ans + "'";
+	}
+	return true;
 }
 
 std::vector<std::string> plate::generic_args()

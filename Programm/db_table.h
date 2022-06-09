@@ -12,6 +12,7 @@ class plate
 public:
 	static std::vector<std::string> change_plate();
 	plate(int pNum);
+	bool pl_trigger(int pNum);
 	std::vector<std::string>generic_args();
 };
 
@@ -26,6 +27,7 @@ class ansamble
 	std::string keys;
 	std::string values;
 public:
+
 	ansamble();
 	std::vector<std::string>generic_args();
 };
